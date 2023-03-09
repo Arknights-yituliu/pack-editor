@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "yituliu-pack-editor"
+version = "0.1.0"
+description = ""
+authors = ["Zhao Zuohong <zhbaor@zhaozuohong.vip>"]
+readme = "README.md"
+packages = [{include = "yituliu_pack_editor"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+django-ninja = "^0.21.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
