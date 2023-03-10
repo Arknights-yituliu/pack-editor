@@ -15,8 +15,8 @@ class PackSchema(Schema):
     packState: int = Field(..., alias="on_sale")
     gachaOriginium: int = Field(..., alias="originium")
     packDraw: float
-    # gachaPermit: int
-    # gachaPermit10: int
+    gachaPermit: int
+    gachaPermit10: int
     # gachaOrundum: int
     # packPPRDraw: float
     # packPPROriginium: float
@@ -27,6 +27,24 @@ class PackSchema(Schema):
     @staticmethod
     def resolve_packType(obj):
         return Pack.Limitation(obj.limitation).label
+
+    @staticmethod
+    def resolve_gachaPermit(obj):
+        try:
+            return (
+                GachaList.objects.filter(pack=obj).get(gacha_resource__name="单抽").count
+            )
+        except:
+            return 0
+
+    @staticmethod
+    def resolve_gachaPermit10(obj):
+        try:
+            return (
+                GachaList.objects.filter(pack=obj).get(gacha_resource__name="十连").count
+            )
+        except:
+            return 0
 
     @staticmethod
     def resolve_packDraw(obj):
