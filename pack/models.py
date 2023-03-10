@@ -2,7 +2,7 @@ from django.db import models
 
 
 class GachaResource(models.Model):
-    name = models.CharField(max_length=40, help_text="名称")
+    name = models.CharField(max_length=40, unique=True, help_text="名称")
     orundum = models.IntegerField(help_text="等价合成玉")
 
     def __str__(self):
@@ -10,14 +10,14 @@ class GachaResource(models.Model):
 
 
 class DevelopResource(models.Model):
-    name = models.CharField(max_length=40, help_text="名称")
+    name = models.CharField(max_length=40, unique=True, help_text="名称")
 
     def __str__(self):
         return self.name
 
 
 class OtherItem(models.Model):
-    name = models.CharField(max_length=40, help_text="名称")
+    name = models.CharField(max_length=40, unique=True, help_text="名称")
     originium = models.IntegerField(blank=True, help_text="等价源石（不填表示难以估计）")
 
     def __str__(self):
@@ -25,8 +25,8 @@ class OtherItem(models.Model):
 
 
 class Pack(models.Model):
-    name = models.CharField(max_length=40, help_text="名称")
-    pack_id = models.IntegerField(help_text="礼包ID")
+    name = models.CharField(max_length=40, unique=True, help_text="名称")
+    pack_id = models.IntegerField(unique=True, help_text="礼包ID")
     limitation = models.CharField(
         max_length=1,
         choices=[
@@ -40,8 +40,8 @@ class Pack(models.Model):
         help_text="购买限制",
     )
     price = models.IntegerField(help_text="价格（元）")
-    on_sale = models.BooleanField(help_text="是否在售")
-    originium = models.IntegerField(help_text="源石")
+    on_sale = models.BooleanField(default=True, help_text="是否在售")
+    originium = models.IntegerField(default=0, help_text="源石")
     gacha_resources = models.ManyToManyField(
         GachaResource, help_text="抽卡资源", through="GachaList"
     )

@@ -12,17 +12,17 @@ from .models import (
 
 @admin.register(GachaResource)
 class GachaAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["name"]
 
 
 @admin.register(DevelopResource)
 class DevelopAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["name"]
 
 
 @admin.register(OtherItem)
 class OtherAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["name"]
 
 
 class GachaNestedInline(admin.TabularInline):
