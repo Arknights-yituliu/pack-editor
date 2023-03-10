@@ -31,18 +31,14 @@ class PackSchema(Schema):
     @staticmethod
     def resolve_gachaPermit(obj):
         try:
-            return (
-                GachaList.objects.filter(pack=obj).get(gacha_resource__name="单抽").count
-            )
+            return GachaList.objects.get(pack=obj, gacha_resource__name="单抽").count
         except:
             return 0
 
     @staticmethod
     def resolve_gachaPermit10(obj):
         try:
-            return (
-                GachaList.objects.filter(pack=obj).get(gacha_resource__name="十连").count
-            )
+            return GachaList.objects.get(pack=obj, gacha_resource__name="十连").count
         except:
             return 0
 
