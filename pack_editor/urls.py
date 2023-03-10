@@ -16,6 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from ninja import NinjaAPI
+from pack.api import router as pack_router
+
+api = NinjaAPI()
+
+api.add_router("/", pack_router)
+
 urlpatterns = [
     path("develop/create/", admin.site.urls),
+    path("api/find/store/pack/", api.urls),
 ]
