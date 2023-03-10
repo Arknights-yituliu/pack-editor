@@ -9,6 +9,7 @@ packages = [{include = "yituliu_pack_editor"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 django-ninja = "^0.21.0"
+python-dotenv = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
