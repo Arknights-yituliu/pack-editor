@@ -32,12 +32,12 @@ class GachaNestedInline(admin.TabularInline):
 
 class GachaInline(admin.TabularInline):
     model = GachaList
-    extra = 0
+    extra = 3
 
 
 class DevelopInline(admin.TabularInline):
     model = DevelopList
-    extra = 0
+    extra = 5
 
 
 class OtherInline(admin.StackedInline):
@@ -56,3 +56,12 @@ class PackAdmin(admin.ModelAdmin):
     )
     radio_fields = {"limitation": admin.HORIZONTAL}
     inlines = [GachaInline, DevelopInline, OtherInline]
+    list_display = [
+        "name",
+        "pack_id",
+        "limitation",
+        "price",
+        "originium",
+        "on_sale",
+        "note",
+    ]
