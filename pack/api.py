@@ -1,6 +1,6 @@
 from ninja import Router, Schema, Field
 from typing import List
-from .models import GachaResource, DevelopResource, OtherItem, Pack
+from .models import GachaResource, DevelopResource, OtherItem, Pack, GachaList
 
 router = Router()
 
@@ -14,7 +14,7 @@ class PackSchema(Schema):
     packType: str
     packState: int = Field(..., alias="on_sale")
     gachaOriginium: int = Field(..., alias="originium")
-    # packDraw: int
+    packDraw: float
     # gachaPermit: int
     # gachaPermit10: int
     # gachaOrundum: int
@@ -27,6 +27,19 @@ class PackSchema(Schema):
     @staticmethod
     def resolve_packType(obj):
         return Pack.Limitation(obj.limitation).label
+
+    @staticmethod
+    def resolve_packDraw(obj):
+        return (
+            sum(
+                [
+                    gl.gacha_resource.orundum * gl.count
+                    for gl in GachaList.objects.filter(pack=obj)
+                ]
+            )
+            / 600
+            + obj.originium * 0.3
+        )
 
 
 class ResponseSchema(Schema):
