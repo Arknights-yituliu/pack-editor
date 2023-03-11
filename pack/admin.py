@@ -12,17 +12,18 @@ from .models import (
 
 @admin.register(GachaResource)
 class GachaAdmin(admin.ModelAdmin):
-    ordering = ["name"]
+    pass
 
 
 @admin.register(DevelopResource)
 class DevelopAdmin(admin.ModelAdmin):
-    ordering = ["name"]
+    ordering = ["pinyin"]
+    search_fields = ["name"]
 
 
 @admin.register(OtherItem)
 class OtherAdmin(admin.ModelAdmin):
-    ordering = ["name"]
+    pass
 
 
 class GachaNestedInline(admin.TabularInline):
@@ -38,6 +39,7 @@ class GachaInline(admin.TabularInline):
 class DevelopInline(admin.TabularInline):
     model = DevelopList
     extra = 5
+    autocomplete_fields = ["develop_resource"]
 
 
 class OtherInline(admin.StackedInline):
