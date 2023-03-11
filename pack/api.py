@@ -40,8 +40,8 @@ class ResponseSchema(Schema):
 
 @router.get("/", response=ResponseSchema)
 def list_packs(request):
+    rpd_648 = 0
     rpo_648 = 0
-    rpo_168 = 0
 
     data = []
     for pack in Pack.objects.all():
@@ -73,10 +73,10 @@ def list_packs(request):
         develop_sum = sum([dl.develop_resource.value * dl.count for dl in dlqs])
         packOriginium = pack.originium + gacha_sum / 180 + develop_sum / 135
         packRmbPerOriginium = pack.price / packOriginium
-        if (name := pack.name) == "普通源石648元":
+
+        if pack.name == "普通源石648元":
+            rpd_648 = packRmbPerDraw
             rpo_648 = packRmbPerOriginium
-        elif name == "每月寻访组合包":
-            rpo_168 = packRmbPerOriginium
 
         packTag = note if (note := pack.note) else None
         data.append(
@@ -101,7 +101,9 @@ def list_packs(request):
             }
         )
     for i in data:
-        i["packPPRDraw"] = rpo_168 / i["packRmbPerOriginium"]
+        i["packPPRDraw"] = (
+            rpd_648 / packRmbPerDraw if (packRmbPerDraw := i["packRmbPerDraw"]) else 0
+        )
         i["packPPROriginium"] = rpo_648 / i["packRmbPerOriginium"]
     return {
         "code": 200,
