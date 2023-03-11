@@ -1,0 +1,7 @@
+.vscode
+examples
+.env
+.gitignore
+.git
+poetry.lock
+pyproject.toml
