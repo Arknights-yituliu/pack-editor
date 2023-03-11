@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from dotenv import load_dotenv
 import os
+from corsheaders.defaults import default_headers
 from pathlib import Path
 
 load_dotenv()
@@ -29,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "yituliu.site", "backend.yituliu.site"]
+ALLOWED_HOSTS = ["yituliu.site", "backend.yituliu.site"]
 
 
 # Application definition
@@ -129,6 +130,10 @@ STATIC_ROOT = "./static/"
 CSRF_TRUSTED_ORIGINS = ["https://yituliu.site"]
 
 CORS_ALLOWED_ORIGINS = ["https://yituliu.site"]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "access-control-max-age",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
