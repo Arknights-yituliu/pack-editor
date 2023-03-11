@@ -24,10 +24,10 @@ class PackSchema(Schema):
     gachaPermit10: int
     gachaOrundum: int
     packRmbPerDraw: float = None
-    # packOriginium: float
-    # packRmbPerOriginium: float
-    # packPPRDraw: float
-    # packPPROriginium: float
+    packOriginium: float
+    packRmbPerOriginium: float
+    packPPRDraw: float
+    packPPROriginium: float
     packContent: List[ContentSchema]
     packTag: str = None
 
@@ -40,13 +40,14 @@ class ResponseSchema(Schema):
 
 @router.get("/", response=ResponseSchema)
 def list_packs(request):
+    rpo_648 = 0
+    rpo_168 = 0
+
     data = []
     for pack in Pack.objects.all():
         glqs = GachaList.objects.filter(pack=pack)
-        packDraw = (
-            sum([gl.gacha_resource.orundum * gl.count for gl in glqs]) / 600
-            + pack.originium * 0.3
-        )
+        gacha_sum = sum([gl.gacha_resource.orundum * gl.count for gl in glqs])
+        packDraw = gacha_sum / 600 + pack.originium * 0.3
         try:
             gachaPermit = glqs.get(gacha_resource__name="单抽").count
         except:
@@ -69,6 +70,13 @@ def list_packs(request):
             }
             for dl in dlqs
         ]
+        develop_sum = sum([dl.develop_resource.value * dl.count for dl in dlqs])
+        packOriginium = pack.originium + gacha_sum / 180 + develop_sum / 135
+        packRmbPerOriginium = pack.price / packOriginium
+        if (name := pack.name) == "普通源石648元":
+            rpo_648 = packRmbPerOriginium
+        elif name == "每月寻访组合包":
+            rpo_168 = packRmbPerOriginium
 
         packTag = note if (note := pack.note) else None
         data.append(
@@ -87,9 +95,14 @@ def list_packs(request):
                 "gachaOrundum": gachaOrundum,
                 "packRmbPerDraw": packRmbPerDraw,
                 "packContent": dl_list,
+                "packOriginium": packOriginium,
+                "packRmbPerOriginium": packRmbPerOriginium,
                 "packTag": packTag,
             }
         )
+    for i in data:
+        i["packPPRDraw"] = rpo_168 / i["packRmbPerOriginium"]
+        i["packPPROriginium"] = rpo_648 / i["packRmbPerOriginium"]
     return {
         "code": 200,
         "msg": "操作成功",
