@@ -40,6 +40,16 @@ class Pack(models.Model):
         unique=True,
         help_text="名称",
     )
+    image = models.CharField(
+        blank=True,
+        max_length=40,
+        help_text="图片名称（不填则使用名称）",
+    )
+    display_name = models.CharField(
+        blank=True,
+        max_length=40,
+        help_text="显示名称（不填则使用名称）",
+    )
     pack_id = models.IntegerField(unique=True, help_text="礼包ID")
     limitation = models.CharField(
         max_length=1,

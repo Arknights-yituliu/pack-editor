@@ -83,6 +83,8 @@ class OtherInline(admin.TabularInline):
 class PackAdmin(admin.ModelAdmin):
     fields = (
         ("name", "pack_id"),
+        "display_name",
+        "image",
         "limitation",
         ("price", "on_sale"),
         "originium",

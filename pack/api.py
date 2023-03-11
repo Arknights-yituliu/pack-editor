@@ -45,6 +45,11 @@ def list_packs(request):
 
     data = []
     for pack in Pack.objects.all():
+        display_name = (
+            display_name if (display_name := pack.display_name) else pack.name
+        )
+        image = image if (image := pack.image) else pack.name
+
         glqs = GachaList.objects.filter(pack=pack)
         gacha_sum = sum([gl.gacha_resource.orundum * gl.count for gl in glqs])
         packDraw = gacha_sum / 600 + pack.originium * 0.3
@@ -91,8 +96,8 @@ def list_packs(request):
         data.append(
             {
                 "packName": pack.name,
-                "packShowName": pack.name,
-                "packImg": pack.name,
+                "packShowName": display_name,
+                "packImg": image,
                 "packID": pack.pack_id,
                 "packPrice": pack.price,
                 "packType": Pack.Limitation(pack.limitation).label,
