@@ -5,3 +5,4 @@ examples
 .git
 poetry.lock
 pyproject.toml
+db.sqlite3
