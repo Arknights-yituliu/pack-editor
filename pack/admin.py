@@ -8,6 +8,9 @@ from .models import (
     DevelopList,
     OtherList,
 )
+from pypinyin import lazy_pinyin
+import requests
+from django_object_actions import DjangoObjectActions, action
 
 
 @admin.register(GachaResource)
@@ -16,19 +19,40 @@ class GachaAdmin(admin.ModelAdmin):
 
 
 @admin.register(DevelopResource)
-class DevelopAdmin(admin.ModelAdmin):
+class DevelopAdmin(DjangoObjectActions, admin.ModelAdmin):
     ordering = ["pinyin"]
     search_fields = ["name"]
+    fields = ("name",)
+    changelist_actions = ("update_value",)
+    list_display = ["name", "value"]
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pinyin:
+            obj.pinyin = "".join(lazy_pinyin(obj.name))
+        super().save_model(request, obj, form, change)
+
+    @action(label="更新等效理智")
+    def update_value(modeladmin, request, queryset):
+        r = requests.get(
+            "https://backend.yituliu.site/api/find/item/value/",
+            params={"expCoefficient": 0.625},
+        )
+        data = r.json()["data"]
+        qs = DevelopResource.objects.all()
+        for i in data:
+            name = i["itemName"]
+            qs.update_or_create(
+                name=name,
+                defaults={
+                    "pinyin": "".join(lazy_pinyin(name)),
+                    "value": i["itemValue"],
+                },
+            )
 
 
 @admin.register(OtherItem)
 class OtherAdmin(admin.ModelAdmin):
     pass
-
-
-class GachaNestedInline(admin.TabularInline):
-    model = GachaResource
-    extra = 0
 
 
 class GachaInline(admin.TabularInline):

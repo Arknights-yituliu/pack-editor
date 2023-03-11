@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django_object_actions",
     "pack.apps.PackConfig",
     "django.contrib.admin",
     "django.contrib.auth",

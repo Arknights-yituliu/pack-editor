@@ -1,5 +1,4 @@
 from django.db import models
-from pypinyin import lazy_pinyin
 
 
 class GachaResource(models.Model):
@@ -12,11 +11,8 @@ class GachaResource(models.Model):
 
 class DevelopResource(models.Model):
     name = models.CharField(max_length=40, unique=True, help_text="名称")
-    pinyin = models.CharField(max_length=40)
-
-    def save(self, *args, **kwargs):
-        self.pinyin = "".join(lazy_pinyin(self.name))
-        super().save(*args, **kwargs)
+    pinyin = models.CharField(max_length=40, help_text="拼音")
+    value = models.FloatField(null=True, default=0, help_text="等效理智价值")
 
     def __str__(self):
         return self.name
