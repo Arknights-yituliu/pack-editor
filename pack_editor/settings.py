@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["yituliu.site", "backend.yituliu.site"]
+ALLOWED_HOSTS = ["127.0.0.1", "yituliu.site", "backend.yituliu.site"]
 
 
 # Application definition
@@ -123,6 +123,8 @@ USE_TZ = True
 
 STATIC_URL = "develop/create/static/"
 STATIC_ROOT = "./static/"
+
+CSRF_TRUSTED_ORIGINS = ["https://yituliu.site"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
