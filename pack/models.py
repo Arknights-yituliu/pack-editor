@@ -20,7 +20,7 @@ class DevelopResource(models.Model):
 
 class OtherItem(models.Model):
     name = models.CharField(max_length=40, unique=True, help_text="名称")
-    originium = models.IntegerField(blank=True, help_text="等价源石（不填表示难以估计）")
+    originium = models.IntegerField(help_text="等价源石")
 
     def __str__(self):
         return self.name

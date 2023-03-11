@@ -1,6 +1,6 @@
 from ninja import Router, Schema
 from typing import List
-from .models import Pack, GachaList, DevelopList
+from .models import Pack, GachaList, DevelopList, OtherList
 
 router = Router()
 
@@ -71,7 +71,16 @@ def list_packs(request):
             for dl in dlqs
         ]
         develop_sum = sum([dl.develop_resource.value * dl.count for dl in dlqs])
-        packOriginium = pack.originium + gacha_sum / 180 + develop_sum / 135
+        oiqs = OtherList.objects.filter(pack=pack)
+        oi_list = [
+            {
+                "packContentItem": oi.other_item.name,
+                "packContentQuantity": oi.count,
+            }
+            for oi in oiqs
+        ]
+        other_sum = sum([oi.other_item.originium * oi.count for oi in oiqs])
+        packOriginium = pack.originium + gacha_sum / 180 + develop_sum / 135 + other_sum
         packRmbPerOriginium = pack.price / packOriginium
 
         if pack.name == "普通源石648元":
@@ -94,7 +103,7 @@ def list_packs(request):
                 "gachaPermit10": gachaPermit10,
                 "gachaOrundum": gachaOrundum,
                 "packRmbPerDraw": packRmbPerDraw,
-                "packContent": dl_list,
+                "packContent": dl_list + oi_list,
                 "packOriginium": packOriginium,
                 "packRmbPerOriginium": packRmbPerOriginium,
                 "packTag": packTag,

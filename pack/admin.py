@@ -22,9 +22,9 @@ class GachaAdmin(admin.ModelAdmin):
 class DevelopAdmin(DjangoObjectActions, admin.ModelAdmin):
     ordering = ["pinyin"]
     search_fields = ["name"]
-    fields = ("name",)
+    fields = ("name", "value")
     changelist_actions = ("update_value",)
-    list_display = ["name", "value"]
+    list_display = ["name", "value", "in_pack"]
 
     def save_model(self, request, obj, form, change):
         if not obj.pinyin:
@@ -49,10 +49,18 @@ class DevelopAdmin(DjangoObjectActions, admin.ModelAdmin):
                 },
             )
 
+    @admin.display(description="礼包")
+    def in_pack(self, obj):
+        pack_list = [f"{p.pack.name}" for p in obj.developlist_set.all()]
+        if (length := len(pack_list)) > 2:
+            return f"{pack_list[0]}, {pack_list[1]} 等（共{length}个）"
+        else:
+            return ", ".join(pack_list)
+
 
 @admin.register(OtherItem)
 class OtherAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["name", "originium"]
 
 
 class GachaInline(admin.TabularInline):
@@ -66,7 +74,7 @@ class DevelopInline(admin.TabularInline):
     autocomplete_fields = ["develop_resource"]
 
 
-class OtherInline(admin.StackedInline):
+class OtherInline(admin.TabularInline):
     model = OtherList
     extra = 0
 
