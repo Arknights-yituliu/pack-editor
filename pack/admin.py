@@ -45,7 +45,7 @@ class DevelopAdmin(DjangoObjectActions, admin.ModelAdmin):
                 name=name,
                 defaults={
                     "pinyin": "".join(lazy_pinyin(name)),
-                    "value": i["itemValue"],
+                    "value": i["itemValue"] * 0.8,  # 在绿票价值与理智价值之间换算
                 },
             )
 
