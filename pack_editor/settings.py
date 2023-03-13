@@ -129,7 +129,7 @@ STATIC_ROOT = "./static/"
 
 CSRF_TRUSTED_ORIGINS = ["https://yituliu.site"]
 
-CORS_ALLOWED_ORIGINS = ["https://yituliu.site"]
+CORS_ALLOWED_ORIGINS = ["https://yituliu.site", "http://yituliu.site"]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "access-control-max-age",
