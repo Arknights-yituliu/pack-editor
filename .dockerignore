@@ -6,3 +6,5 @@ examples
 poetry.lock
 pyproject.toml
 db.sqlite3
+docs
+README.md

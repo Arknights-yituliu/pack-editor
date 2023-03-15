@@ -2,6 +2,8 @@ from django.db import models
 
 
 class GachaResource(models.Model):
+    """抽卡资源"""
+
     name = models.CharField(max_length=40, unique=True, help_text="名称")
     orundum = models.IntegerField(help_text="等价合成玉")
 
@@ -10,6 +12,8 @@ class GachaResource(models.Model):
 
 
 class DevelopResource(models.Model):
+    """养成资源"""
+
     name = models.CharField(max_length=40, unique=True, help_text="名称")
     pinyin = models.CharField(max_length=40, help_text="拼音")
     value = models.FloatField(null=True, default=0, help_text="等效理智价值")
@@ -19,6 +23,8 @@ class DevelopResource(models.Model):
 
 
 class OtherItem(models.Model):
+    """其它资源"""
+
     name = models.CharField(max_length=40, unique=True, help_text="名称")
     originium = models.IntegerField(help_text="等价源石")
 
@@ -27,6 +33,8 @@ class OtherItem(models.Model):
 
 
 class Pack(models.Model):
+    """礼包"""
+
     class Limitation(models.TextChoices):
         ONCE = "1", "once"
         MONTHLY = "m", "monthly"
