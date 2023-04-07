@@ -43,6 +43,11 @@ class Pack(models.Model):
         PERMANENT = "p", "permanent"
         LIMITED = "l", "limited"
 
+    class OnSaleControl(models.TextChoices):
+        MANUAL_ON = "on", "在售（忽略时间）"
+        MANUAL_OFF = "off", "停售（忽略时间）"
+        BY_TIME = "time", "自动（时间控制）"
+
     name = models.CharField(
         max_length=40,
         unique=True,
@@ -65,7 +70,22 @@ class Pack(models.Model):
         help_text="购买限制",
     )
     price = models.IntegerField(help_text="价格（元）")
-    on_sale = models.BooleanField(default=True, help_text="是否在售")
+    on_sale_control = models.CharField(
+        max_length=10,
+        choices=OnSaleControl.choices,
+        default=OnSaleControl.BY_TIME,
+        help_text="若起始与结束日期均为空，则礼包永久在售",
+    )
+    start_date = models.DateField(
+        blank=True,
+        null=True,
+        help_text="开售日期，留空时不检查开售日期",
+    )
+    end_date = models.DateField(
+        blank=True,
+        null=True,
+        help_text="停售日期，留空时不检查停售日期",
+    )
     originium = models.IntegerField(default=0, help_text="源石")
     gacha_resources = models.ManyToManyField(
         GachaResource,

@@ -11,6 +11,7 @@ from .models import (
 from pypinyin import lazy_pinyin
 import requests
 from django_object_actions import DjangoObjectActions, action
+import datetime
 
 
 @admin.register(GachaResource)
@@ -86,7 +87,8 @@ class PackAdmin(admin.ModelAdmin):
         "display_name",
         "image",
         "limitation",
-        ("price", "on_sale"),
+        "price",
+        ("on_sale_control", "start_date", "end_date"),
         "originium",
         "note",
     )
@@ -101,3 +103,18 @@ class PackAdmin(admin.ModelAdmin):
         "on_sale",
         "note",
     ]
+
+    @admin.display(description="在售")
+    def on_sale(self, obj):
+        if (sale_control := obj.on_sale_control) == Pack.OnSaleControl.MANUAL_ON:
+            return "在售（忽略时间）"
+        elif sale_control == Pack.OnSaleControl.MANUAL_OFF:
+            return "停售（忽略时间）"
+        else:
+            now = datetime.date.today()
+            if obj.start_date and now < obj.start_date:
+                return "未开售（时间控制）"
+            elif obj.end_date and now > obj.end_date:
+                return "已停售（时间控制）"
+            else:
+                return "在售（时间控制）"
