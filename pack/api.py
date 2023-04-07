@@ -1,6 +1,7 @@
 from ninja import Router, Schema
 from typing import List
 from .models import Pack, GachaList, DevelopList, OtherList
+import datetime
 
 router = Router()
 
@@ -45,6 +46,20 @@ def list_packs(request):
 
     data = []
     for pack in Pack.objects.all():
+        on_sale = True
+        if (sale_control := pack.on_sale_control) == Pack.OnSaleControl.MANUAL_ON:
+            on_sale = False
+        elif sale_control == Pack.OnSaleControl.MANUAL_OFF:
+            on_sale = False
+        else:
+            now = datetime.date.today()
+            if pack.start_date and now < pack.start_date:
+                on_sale = False
+            elif pack.end_date and now > pack.end_date:
+                on_sale = False
+            else:
+                pass
+
         display_name = (
             display_name if (display_name := pack.display_name) else pack.name
         )
@@ -101,7 +116,7 @@ def list_packs(request):
                 "packID": pack.pack_id,
                 "packPrice": pack.price,
                 "packType": Pack.Limitation(pack.limitation).label,
-                "packState": pack.on_sale,
+                "packState": on_sale,
                 "gachaOriginium": pack.originium,
                 "packDraw": packDraw,
                 "gachaPermit": gachaPermit,
