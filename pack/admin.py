@@ -34,7 +34,7 @@ class DevelopAdmin(DjangoObjectActions, admin.ModelAdmin):
     @action(label="更新等效理智")
     def update_value(modeladmin, request, queryset):
         r = requests.get(
-            "https://backend.yituliu.site/api/find/item/value/",
+            "https://backend.yituliu.site/item/value/",
             params={"expCoefficient": 0.625},
         )
         data = r.json()["data"]
@@ -45,7 +45,7 @@ class DevelopAdmin(DjangoObjectActions, admin.ModelAdmin):
                 name=name,
                 defaults={
                     "pinyin": "".join(lazy_pinyin(name)),
-                    "value": i["itemValue"] * 0.8,  # 在绿票价值与理智价值之间换算
+                    "value": i["itemValueAp"],
                 },
             )
 
