@@ -26,7 +26,7 @@ class OtherItem(models.Model):
     """其它资源"""
 
     name = models.CharField(max_length=40, unique=True, help_text="名称")
-    originium = models.IntegerField(help_text="等价源石")
+    originium = models.FloatField(help_text="等价源石")
 
     def __str__(self):
         return self.name
