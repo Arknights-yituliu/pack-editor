@@ -165,9 +165,22 @@ def list_packs_gacha(request):
     raw_data = get_pack_data()
     data = []
     for i in raw_data:
-        if i["packPPRDraw"] != 0 and i["packName"] != "每月寻访组合包":
-            data.append(i)
+        if i["packPPRDraw"] == 0:
+            continue
+        if i["packName"] == "每月寻访组合包":
+            continue
+        if "普通源石" in i["packName"]:
+            continue
+        data.append(i)
         i["rewardType"] = "公共"
+        if not i["start"]:
+            i["start"] = "2000/01/01 00:00:00"
+        else:
+            i["start"] = i["start"].strftime("%Y/%m/%d 00:00:00")
+        if not i["end"]:
+            i["end"] = "2099/01/01 00:00:00"
+        else:
+            i["end"] = i["end"].strftime("%Y/%m/%d 00:00:00")
     return {
         "code": 200,
         "msg": "操作成功",
