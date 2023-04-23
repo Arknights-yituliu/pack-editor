@@ -39,8 +39,7 @@ class ResponseSchema(Schema):
     data: List[PackSchema]
 
 
-@router.get("/", response=ResponseSchema)
-def list_packs(request):
+def get_pack_data():
     rpd_648 = 0
     rpo_648 = 0
 
@@ -48,15 +47,17 @@ def list_packs(request):
     for pack in Pack.objects.all():
         on_sale = True
         if (sale_control := pack.on_sale_control) == Pack.OnSaleControl.MANUAL_ON:
-            on_sale = False
+            on_sale = True
         elif sale_control == Pack.OnSaleControl.MANUAL_OFF:
-            on_sale = False
+            # on_sale = False
+            continue
         else:
             now = datetime.date.today()
             if pack.start_date and now < pack.start_date:
                 on_sale = False
             elif pack.end_date and now > pack.end_date:
-                on_sale = False
+                # on_sale = False
+                continue
             else:
                 pass
 
@@ -127,6 +128,8 @@ def list_packs(request):
                 "packOriginium": packOriginium,
                 "packRmbPerOriginium": packRmbPerOriginium,
                 "packTag": packTag,
+                "start": pack.start_date,
+                "end": pack.end_date,
             }
         )
     for i in data:
@@ -134,6 +137,37 @@ def list_packs(request):
             rpd_648 / packRmbPerDraw if (packRmbPerDraw := i["packRmbPerDraw"]) else 0
         )
         i["packPPROriginium"] = rpo_648 / i["packRmbPerOriginium"]
+
+    return data
+
+
+@router.get("/pack/", response=ResponseSchema)
+def list_packs(request):
+    return {
+        "code": 200,
+        "msg": "操作成功",
+        "data": get_pack_data(),
+    }
+
+
+class PackGachaSchema(PackSchema):
+    start: str = None
+    end: str = None
+    rewardType: str
+
+
+class ResponseGachaSchema(ResponseSchema):
+    data: List[PackGachaSchema]
+
+
+@router.get("/pack-gacha/", response=ResponseGachaSchema)
+def list_packs_gacha(request):
+    raw_data = get_pack_data()
+    data = []
+    for i in raw_data:
+        if i["packPPRDraw"] != 0 and i["packName"] != "每月寻访组合包":
+            data.append(i)
+        i["rewardType"] = "公共"
     return {
         "code": 200,
         "msg": "操作成功",

@@ -25,5 +25,5 @@ api.add_router("/", pack_router)
 
 urlpatterns = [
     path("develop/create/", admin.site.urls),
-    path("api/find/store/pack/", api.urls),
+    path("api/find/store/", api.urls),
 ]
