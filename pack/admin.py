@@ -101,10 +101,11 @@ class PackAdmin(admin.ModelAdmin):
         "price",
         "originium",
         "on_sale",
+        "date_range",
         "note",
     ]
 
-    @admin.display(description="在售")
+    @admin.display(description="在售状态")
     def on_sale(self, obj):
         if (sale_control := obj.on_sale_control) == Pack.OnSaleControl.MANUAL_ON:
             return "在售（忽略时间）"
@@ -118,3 +119,16 @@ class PackAdmin(admin.ModelAdmin):
                 return "已停售（时间控制）"
             else:
                 return "在售（时间控制）"
+
+    @admin.display(description="上架时间")
+    def date_range(self, obj):
+        if (sale_control := obj.on_sale_control) != Pack.OnSaleControl.BY_TIME:
+            return "-"
+        if obj.start_date and obj.end_date:
+            return obj.start_date.isoformat() + "-" + obj.end_date.isoformat()
+        elif obj.start_date:
+            return obj.start_date.isoformat() + " - +∞"
+        elif obj.end_date:
+            return "-∞ - " + obj.end_date.isoformat()
+        else:
+            return "-∞ - +∞"
