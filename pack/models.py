@@ -103,6 +103,11 @@ class Pack(models.Model):
         through="OtherList",
     )
     note = models.TextField("备注", blank=True)
+    img = models.ImageField(
+        upload_to="pack_img",
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return self.name

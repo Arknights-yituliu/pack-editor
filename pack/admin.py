@@ -12,6 +12,7 @@ from pypinyin import lazy_pinyin
 import requests
 from django_object_actions import DjangoObjectActions, action
 import datetime
+from django.utils.html import format_html
 
 
 @admin.register(GachaResource)
@@ -91,11 +92,14 @@ class PackAdmin(admin.ModelAdmin):
         ("on_sale_control", "start_date", "end_date"),
         "originium",
         "note",
+        "img_preview",
+        "img",
     )
     radio_fields = {"limitation": admin.HORIZONTAL}
     inlines = [GachaInline, DevelopInline, OtherInline]
     list_display = [
         "name",
+        "list_img_preview",
         "pack_id",
         "limitation",
         "price",
@@ -103,6 +107,9 @@ class PackAdmin(admin.ModelAdmin):
         "on_sale",
         "date_range",
         "note",
+    ]
+    readonly_fields = [
+        "img_preview",
     ]
 
     @admin.display(description="在售状态")
@@ -132,3 +139,17 @@ class PackAdmin(admin.ModelAdmin):
             return "-∞ - " + obj.end_date.isoformat()
         else:
             return "-∞ - +∞"
+
+    @admin.display(description="礼包图片")
+    def list_img_preview(self, obj):
+        if obj.img:
+            return format_html('<img src="{}" height="16px" />', obj.img.url)
+        else:
+            return "无"
+
+    @admin.display(description="礼包图片")
+    def img_preview(self, obj):
+        if obj.img:
+            return format_html('<img src="{}" />', obj.img.url)
+        else:
+            return "无"

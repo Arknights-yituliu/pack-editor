@@ -19,6 +19,9 @@ from django.urls import path
 from ninja import NinjaAPI
 from pack.api import router as pack_router
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 api = NinjaAPI()
 
 api.add_router("/", pack_router)
@@ -26,4 +29,4 @@ api.add_router("/", pack_router)
 urlpatterns = [
     path("develop/create/", admin.site.urls),
     path("store/", api.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
