@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["yituliu.site", "backend.yituliu.site", "127.0.0.1"]
+ALLOWED_HOSTS = ["yituliu.site", "https://ark.yituliu.cn","backend.yituliu.site", "127.0.0.1"]
 
 
 # Application definition
