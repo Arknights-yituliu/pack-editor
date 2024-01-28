@@ -133,6 +133,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://yituliu.site",
     "http://yituliu.site",
     "https://dev.yituliu.site",
+    "https://ark.yituliu.cn"
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
