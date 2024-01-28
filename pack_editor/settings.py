@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["yituliu.site", "ark.yituliu.cn","backend.yituliu.site", "127.0.0.1"]
+ALLOWED_HOSTS = ["ytl.viktorlab.cn/","ark.yituliu.cn","127.0.0.1"]
 
 
 # Application definition
@@ -127,12 +127,10 @@ USE_TZ = True
 STATIC_URL = "develop/create/static/"
 STATIC_ROOT = "./static/"
 
-CSRF_TRUSTED_ORIGINS = ["https://yituliu.site"]
+CSRF_TRUSTED_ORIGINS = ["https://ark.yituliu.cn"]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://yituliu.site",
-    "http://yituliu.site",
-    "https://dev.yituliu.site",
+    "https://ytl.viktorlab.cn",
     "https://ark.yituliu.cn"
 ]
 
